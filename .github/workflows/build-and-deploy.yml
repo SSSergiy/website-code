@@ -1,50 +1,39 @@
-name: Build and Deploy Client Websites
+name: Build and Deploy Sites
 
 on:
-  # Ручной запуск
-  workflow_dispatch:
-  
-  # Запуск по расписанию (каждый день в 00:00)
+  workflow_dispatch: # Ручной запуск из админки
   schedule:
-    - cron: '0 0 * * *'
-  
-  # Запуск при push в main
-  push:
-    branches:
-      - main
+    - cron: '0 */6 * * *' # Каждые 6 часов (опционально)
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+        
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-      
+          
       - name: Install dependencies
         run: npm ci
-      
+        
       - name: Build sites
         env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          R2_BUCKET_NAME: ${{ secrets.R2_BUCKET_NAME }}
-          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET_NAME: ${{ secrets.R2_BUCKET_NAME }}
         run: npm run build
-      
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
+        
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.R2_ACCOUNT_ID }}
-          projectName: client-websites
-          directory: _site
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
+          publish_branch: gh-pages
+          force_orphan: true

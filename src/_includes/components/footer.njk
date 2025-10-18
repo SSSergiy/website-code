@@ -1,0 +1,49 @@
+<footer class="bg-gray-50 border-t mt-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Колонка 1: О компании -->
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">{{ site.title }}</h3>
+        <p class="text-gray-600 text-sm">
+          {{ site.description }}
+        </p>
+      </div>
+
+      <!-- Колонка 2: Навигация -->
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Навигация</h3>
+        <ul class="space-y-2">
+          {% for page in site.pages %}
+          {% if page.published %}
+          <li>
+            <a href="{{ page.slug }}" class="text-gray-600 hover:text-gray-900 text-sm">
+              {{ page.title }}
+            </a>
+          </li>
+          {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+
+      <!-- Колонка 3: Контакты -->
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Контакты</h3>
+        <ul class="space-y-2 text-sm text-gray-600">
+          {% if site.email %}
+          <li>Email: <a href="mailto:{{ site.email }}" class="hover:text-gray-900">{{ site.email }}</a></li>
+          {% endif %}
+          {% if site.phone %}
+          <li>Телефон: <a href="tel:{{ site.phone }}" class="hover:text-gray-900">{{ site.phone }}</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="border-t mt-8 pt-8 text-center">
+      <p class="text-gray-500 text-sm">
+        © 2025 {{ site.title }}. Все права защищены.
+      </p>
+    </div>
+  </div>
+</footer>

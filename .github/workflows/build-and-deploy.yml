@@ -1,18 +1,45 @@
-name: Trigger Cloudflare Pages Deploy
+name: Build and Deploy to Main
 
 on:
   workflow_dispatch: # Ручной запуск из админки через кнопку "Опубликовать"
   push:
     branches:
-      - main # Автодеплой при push в main
+      - dev # Билдится при push в dev
 
 jobs:
-  trigger-deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Trigger Cloudflare Pages Deploy
-        run: |
-          echo "✅ Workflow triggered successfully!"
-          echo "Cloudflare Pages will automatically deploy from main branch"
-          echo "Check deploy status at: https://dash.cloudflare.com"
+      - name: Checkout dev branch
+        uses: actions/checkout@v4
+        with:
+          ref: dev
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build sites
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET_NAME: ${{ secrets.R2_BUCKET_NAME }}
+        run: npm run build
+        
+      - name: Deploy to main branch
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
+          publish_branch: main
+          force_orphan: true
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: 'Deploy: ${{ github.sha }}'

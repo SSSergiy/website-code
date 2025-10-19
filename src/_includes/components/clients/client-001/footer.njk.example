@@ -1,0 +1,37 @@
+<!-- ПРИМЕР кастомного footer для client-001 -->
+<!-- Переименуй этот файл: удали .example -->
+
+<footer class="bg-gradient-to-r from-purple-900 to-pink-900 text-white py-12 mt-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- О компании -->
+      <div>
+        <h3 class="text-2xl font-bold mb-4">{{ site.title }}</h3>
+        <p class="text-purple-200">
+          {{ site.description }}
+        </p>
+      </div>
+
+      <!-- Контакты -->
+      <div>
+        <h3 class="text-2xl font-bold mb-4">Свяжитесь с нами</h3>
+        <ul class="space-y-2 text-purple-200">
+          {% if site.email %}
+          <li>📧 <a href="mailto:{{ site.email }}" class="hover:text-white transition-colors">{{ site.email }}</a></li>
+          {% endif %}
+          {% if site.phone %}
+          <li>📱 <a href="tel:{{ site.phone }}" class="hover:text-white transition-colors">{{ site.phone }}</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="border-t border-purple-700 mt-8 pt-8 text-center">
+      <p class="text-purple-300 text-sm">
+        © 2025 {{ site.title }}. Уникальный дизайн создан специально для вас! 🎨
+      </p>
+    </div>
+  </div>
+</footer>
+

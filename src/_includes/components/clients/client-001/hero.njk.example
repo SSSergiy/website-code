@@ -1,0 +1,42 @@
+<!-- ПРИМЕР кастомного hero для client-001 -->
+<!-- Переименуй этот файл: удали .example -->
+
+<section class="relative bg-gradient-to-br from-purple-100 to-pink-100 py-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center">
+      <!-- Кастомная иконка/эмодзи -->
+      <div class="text-6xl mb-6">🎨</div>
+      
+      <h1 class="text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 mb-6">
+        {{ hero.title or site.title }}
+      </h1>
+      
+      <p class="text-xl text-gray-700 mb-8 max-w-2xl mx-auto">
+        {{ hero.description or site.description }}
+      </p>
+      
+      <!-- Кастомные кнопки -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <a href="#contact" 
+           class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-4 px-8 rounded-full transition-all transform hover:scale-105 shadow-lg">
+          Связаться с нами
+        </a>
+        <a href="#gallery" 
+           class="bg-white hover:bg-gray-50 text-purple-600 font-bold py-4 px-8 rounded-full transition-all border-2 border-purple-600">
+          Смотреть галерею
+        </a>
+      </div>
+    </div>
+    
+    {% if hero.image %}
+      <div class="mt-16">
+        <img 
+          src="{{ hero.image }}" 
+          alt="{{ hero.title }}"
+          class="rounded-2xl shadow-2xl mx-auto max-w-4xl w-full border-8 border-white"
+        >
+      </div>
+    {% endif %}
+  </div>
+</section>
+

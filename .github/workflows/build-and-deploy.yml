@@ -1,4 +1,4 @@
-name: Build and Deploy to Main
+name: Build and Deploy
 
 on:
   workflow_dispatch: # Ручной запуск из админки через кнопку "Опубликовать"
@@ -59,15 +59,11 @@ jobs:
           npm run build
           echo "✅ Build completed"
         
-      - name: Deploy to main branch
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site
-          publish_branch: main
-          force_orphan: true
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
-          commit_message: 'Deploy: ${{ github.sha }}'
-          keep_files: false
-          enable_jekyll: false
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ${{ secrets.CLOUDFLARE_PROJECT_NAME }}
+          directory: _site
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}

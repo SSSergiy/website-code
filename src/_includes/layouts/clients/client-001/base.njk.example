@@ -1,0 +1,73 @@
+<!-- ПРИМЕР кастомного layout для client-001 -->
+<!-- Переименуй этот файл: удали .example -->
+
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title or site.title }} - Кастомный дизайн</title>
+  <meta name="description" content="{{ description or site.description }}">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Кастомный CSS для этого клиента -->
+  <style>
+    /* Уникальная цветовая схема */
+    :root {
+      --primary-color: #9333ea; /* Фиолетовый */
+      --secondary-color: #ec4899; /* Розовый */
+    }
+
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    .custom-container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      margin: 40px auto;
+      max-width: 1200px;
+      overflow: hidden;
+    }
+
+    .image-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .gallery-item img {
+      border-radius: 12px;
+      transition: transform 0.3s ease;
+    }
+
+    .gallery-item img:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+
+<body class="antialiased">
+  <!-- Кастомный header -->
+  {% include "components/clients/client-001/header.njk" %}
+
+  <div class="custom-container">
+    <main>
+      {{ content | safe }}
+    </main>
+  </div>
+
+  <!-- Кастомный footer -->
+  {% include "components/clients/client-001/footer.njk" %}
+
+  <!-- Main JS -->
+  <script type="module" src="/assets/js/main.js"></script>
+</body>
+
+</html>
+

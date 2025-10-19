@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 export default function(eleventyConfig) {
   // Копируем статические файлы
   eleventyConfig.addPassthroughCopy({ "src/assets/js": "assets/js" });

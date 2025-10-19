@@ -1,17 +1,17 @@
 ---
 pagination:
-  data: clients
-  size: 1
-  alias: client
+data: clients
+size: 1
+alias: client
 permalink: "/{{ client.id }}/index.html"
-layout: layouts/base.njk
+layout: layouts/default/base.njk
 ---
 
 {% set site = client.site %}
 {% set hero = client.hero or {} %}
 
 <!-- Hero Section -->
-{% include "components/hero.njk" %}
+{% include "components/default/hero.njk" %}
 
 <!-- Content Sections -->
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">

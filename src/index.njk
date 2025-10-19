@@ -1,14 +1,7 @@
 ---
-pagination:
-data: clients
-size: 1
-alias: client
-permalink: "/{{ client.id }}/index.html"
 layout: layouts/default/base.njk
+title: Главная
 ---
-
-{% set site = client.site %}
-{% set hero = client.hero or {} %}
 
 <!-- Hero Section -->
 {% include "components/default/hero.njk" %}
@@ -29,16 +22,19 @@ layout: layouts/default/base.njk
   {% endif %}
 </div>
 
-<!-- Gallery Section (если есть изображения) -->
-{% if client.images %}
-<section class="py-16">
+<!-- Gallery Section -->
+{% if client.images and client.images.length > 0 %}
+<section id="gallery" class="py-16 bg-white">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Галерея</h2>
     <div class="image-gallery">
       {% for image in client.images %}
       <div class="gallery-item fade-in">
-        <img src="https://pub-a6698d33e75a45ebb75c9b00d0c3ce2a.r2.dev/clients/{{ client.id }}/images/{{ image }}"
-          alt="{{ image }}" loading="lazy">
+        <img 
+          src="https://pub-a6698d33e75a45ebb75c9b00d0c3ce2a.r2.dev/clients/{{ client.id }}/images/{{ image }}"
+          alt="{{ image }}" 
+          loading="lazy"
+        >
       </div>
       {% endfor %}
     </div>
@@ -46,7 +42,7 @@ layout: layouts/default/base.njk
 </section>
 {% endif %}
 
-<!-- Features Section (если есть) -->
+<!-- Features Section -->
 {% if client.features %}
 <section class="bg-gray-50 py-16">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -65,3 +61,4 @@ layout: layouts/default/base.njk
   </div>
 </section>
 {% endif %}
+

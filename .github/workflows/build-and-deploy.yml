@@ -1,15 +1,10 @@
 name: Build and Deploy
 
 on:
-  workflow_dispatch: # Ручной запуск из админки через кнопку "Опубликовать"
-    inputs:
-      clientId:
-        description: 'Build only specific client (optional)'
-        required: false
-        type: string
   push:
     branches:
-      - dev # Билдится при push в dev
+      - dev
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
@@ -42,20 +37,16 @@ jobs:
           npm ci
           echo "✅ Dependencies installed"
         
-      - name: Build sites
+      - name: Build site
         env:
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
           R2_BUCKET_NAME: ${{ secrets.R2_BUCKET_NAME }}
-          CLIENT_ID: ${{ inputs.clientId }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
         run: |
-          if [ -n "$CLIENT_ID" ]; then
-            echo "🔨 Building only client: $CLIENT_ID"
-          else
-            echo "🔨 Building all clients"
-          fi
+          echo "🔨 Building site for client: $CLIENT_ID"
           npm run build
           echo "✅ Build completed"
         

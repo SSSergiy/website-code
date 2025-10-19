@@ -86,7 +86,32 @@ async function listClients() {
 
 // Главная функция экспорта
 export default async function() {
-  console.log('Loading client data from R2...');
+  const specificClientId = process.env.CLIENT_ID;
+  
+  // Если указан конкретный клиент - билдим только его
+  if (specificClientId) {
+    console.log(`🎯 Building ONLY client: ${specificClientId}`);
+    
+    const config = await getJsonFromR2(`clients/${specificClientId}/data/config.json`);
+    
+    if (!config) {
+      console.error(`❌ Config not found for client: ${specificClientId}`);
+      return [];
+    }
+    
+    const images = await listImages(specificClientId);
+    
+    console.log(`✅ Loaded data for client: ${specificClientId}`);
+    
+    return [{
+      id: specificClientId,
+      ...config,
+      images: images
+    }];
+  }
+  
+  // Иначе билдим всех клиентов
+  console.log('🔨 Loading ALL clients from R2...');
   
   const clientIds = await listClients();
   console.log(`Found ${clientIds.length} clients`);
@@ -111,7 +136,7 @@ export default async function() {
     }
   }
   
-  console.log(`Loaded ${clients.length} client configurations`);
+  console.log(`✅ Loaded ${clients.length} client configurations`);
   
   return clients;
 }

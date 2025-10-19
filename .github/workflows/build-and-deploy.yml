@@ -43,3 +43,5 @@ jobs:
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
           commit_message: 'Deploy: ${{ github.sha }}'
+          keep_files: false
+          enable_jekyll: false

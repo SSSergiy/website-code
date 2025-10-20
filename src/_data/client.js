@@ -90,6 +90,7 @@ export default async function() {
   console.log(`✅ Loaded data for client: ${CLIENT_ID}`);
   console.log(`   - Images: ${images.length}`);
   console.log(`   - Title: ${config.site?.title || 'N/A'}`);
+  console.log(`   - Sections: ${config.sections?.length || 0}`);
   
   return {
     id: CLIENT_ID,

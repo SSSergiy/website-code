@@ -3,58 +3,180 @@ layout: layouts/default/base.njk
 title: Главная
 ---
 
+<!-- Автоматический рендеринг всех секций из config.json -->
+{% if client.sections and client.sections.length > 0 %}
+{% for section in client.sections %}
+{% if section.enabled %}
+{% if section.type == "hero" %}
 <!-- Hero Section -->
-{% include "components/default/hero.njk" %}
-
-<!-- Content Sections -->
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-  {% if client.pages %}
-  {% for page in client.pages %}
-  {% if page.published %}
-  <section id="{{ page.slug }}" class="mb-16">
-    <h2 class="text-3xl font-bold text-gray-900 mb-6">{{ page.title }}</h2>
-    <div class="prose prose-lg max-w-none">
-      {{ page.content | safe }}
-    </div>
-  </section>
-  {% endif %}
-  {% endfor %}
-  {% endif %}
-</div>
-
-<!-- Gallery Section -->
-{% if client.images and client.images.length > 0 %}
-<section id="gallery" class="py-16 bg-white">
+<section class="relative bg-gradient-to-br from-blue-600 to-purple-700 text-white py-20">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Галереяя</h2>
-    <div class="image-gallery">
-      {% for image in client.images %}
-      <div class="gallery-item fade-in">
-        <img src="https://pub-a6698d33e75a45ebb75c9b00d0c3ce2a.r2.dev/clients/{{ client.id }}/images/{{ image }}"
-          alt="{{ image }}" loading="lazy">
+    <div class="text-center">
+      <h1 class="text-4xl md:text-6xl font-bold mb-6">
+        {{ section.data.title }}
+      </h1>
+      <p class="text-xl md:text-2xl mb-8 text-blue-100 max-w-3xl mx-auto">
+        {{ section.data.subtitle }}
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        {% if section.data.ctaButton %}
+        <a href="{{ section.data.ctaButton.href }}"
+          class="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors duration-200">
+          {{ section.data.ctaButton.text }}
+        </a>
+        {% endif %}
+
+        {% if section.data.secondaryButton %}
+        <a href="{{ section.data.secondaryButton.href }}"
+          class="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-blue-600 transition-colors duration-200">
+          {{ section.data.secondaryButton.text }}
+        </a>
+        {% endif %}
       </div>
-      {% endfor %}
     </div>
   </div>
 </section>
 {% endif %}
 
-<!-- Features Section -->
-{% if client.features %}
-<section class="bg-gray-50 py-16">
+{% if section.type == "about" %}
+<!-- About Section -->
+<section class="py-16 bg-white">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Наши преимущества</h2>
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+        {{ section.data.title }}
+      </h2>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        {{ section.data.description }}
+      </p>
+    </div>
+
+    {% if section.data.features %}
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      {% for feature in client.features %}
-      <div class="bg-white p-6 rounded-lg shadow-sm">
-        {% if feature.icon %}
+      {% for feature in section.data.features %}
+      <div class="text-center p-6">
         <div class="text-4xl mb-4">{{ feature.icon }}</div>
-        {% endif %}
         <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ feature.title }}</h3>
         <p class="text-gray-600">{{ feature.description }}</p>
       </div>
       {% endfor %}
     </div>
+    {% endif %}
   </div>
 </section>
+{% endif %}
+
+{% if section.type == "services" %}
+<!-- Services Section -->
+<section class="py-16 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+        {{ section.data.title }}
+      </h2>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        {{ section.data.subtitle }}
+      </p>
+    </div>
+
+    {% if section.data.services %}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {% for service in section.data.services %}
+      <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200">
+        <div class="text-4xl mb-4">{{ service.icon }}</div>
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ service.title }}</h3>
+        <p class="text-gray-600 mb-4">{{ service.description }}</p>
+        <div class="text-2xl font-bold text-blue-600 mb-4">{{ service.price }}</div>
+        {% if service.features %}
+        <ul class="space-y-2">
+          {% for feature in service.features %}
+          <li class="flex items-center text-sm text-gray-600">
+            <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+            {{ feature }}
+          </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endif %}
+
+{% if section.type == "contact" %}
+<!-- Contact Section -->
+<section class="py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+        {{ section.data.title }}
+      </h2>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        {{ section.data.subtitle }}
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+      <div>
+        <h3 class="text-xl font-semibold text-gray-900 mb-6">Контактная информация</h3>
+        <div class="space-y-4">
+          <div class="flex items-center">
+            <span class="text-gray-500 mr-3">📧</span>
+            <span>{{ section.data.email }}</span>
+          </div>
+          <div class="flex items-center">
+            <span class="text-gray-500 mr-3">📞</span>
+            <span>{{ section.data.phone }}</span>
+          </div>
+          <div class="flex items-center">
+            <span class="text-gray-500 mr-3">📍</span>
+            <span>{{ section.data.address }}</span>
+          </div>
+        </div>
+
+        {% if section.data.socialLinks %}
+        <div class="mt-8">
+          <h4 class="text-lg font-semibold text-gray-900 mb-4">Социальные сети</h4>
+          <div class="flex space-x-4">
+            {% for social in section.data.socialLinks %}
+            <a href="{{ social.url }}" target="_blank"
+              class="text-blue-600 hover:text-blue-800 transition-colors duration-200">
+              {{ social.platform }}
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+      <div>
+        <h3 class="text-xl font-semibold text-gray-900 mb-6">Свяжитесь с нами</h3>
+        <form class="space-y-4">
+          <div>
+            <input type="text" placeholder="Ваше имя"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          </div>
+          <div>
+            <input type="email" placeholder="Ваш email"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          </div>
+          <div>
+            <textarea placeholder="Ваше сообщение" rows="4"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+          </div>
+          <button type="submit"
+            class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200">
+            Отправить сообщение
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endif %}
+{% endfor %}
 {% endif %}

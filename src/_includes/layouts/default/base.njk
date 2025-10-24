@@ -4,10 +4,10 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>{{ title or client.site.title }}</title>
-	<meta name="description" content="{{ description or client.site.description }}">
+	<title>{{ page.title or client.site.title }}</title>
+	<meta name="description" content="{{ page.description or client.site.description }}">
 
-	<!-- Tailwind CSS CDN (для быстрого старта) -->
+	<!-- Tailwind CSS CDN -->
 	<script src="https://cdn.tailwindcss.com"></script>
 
 	<!-- Custom CSS -->
@@ -15,136 +15,32 @@
 </head>
 
 <body class="antialiased">
-	<!-- Автоматический рендеринг Header из config.json -->
-	{% if client.sections and client.sections.length > 0 %}
-	{% set headerSection = client.sections | selectattr("type", "equalto", "header") | first %}
-	{% if headerSection and headerSection.enabled %}
-	<header class="bg-white shadow-sm border-b">
-		<nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-			<div class="flex justify-between items-center h-16">
-				<!-- Logo -->
-				<div class="flex items-center">
-					{% if headerSection.data.logo %}
-					<img
-						src="https://pub-a6698d33e75a45ebb75c9b00d0c3ce2a.r2.dev/clients/{{ client.id }}/images/{{ headerSection.data.logo }}"
-						alt="{{ client.site.title }}" class="h-8 w-auto">
-					{% else %}
-					<span class="text-xl font-bold text-gray-900">{{ client.site.title }}</span>
-					{% endif %}
-				</div>
-
-				<!-- Navigation -->
-				<div class="hidden md:flex space-x-8">
-					{% if headerSection.data.navigation %}
-					{% for item in headerSection.data.navigation %}
-					{% if item.label and item.href and item.label.trim() !== '' and item.href.trim() !== '' %}
-					<a href="{{ item.href }}"
-						class="text-gray-600 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-colors duration-200">
-						{{ item.label }}
-					</a>
-					{% endif %}
-					{% endfor %}
-					{% endif %}
-				</div>
-
-				<!-- CTA Button -->
-				{% if headerSection.data.ctaButton %}
-				<div class="hidden md:block">
-					<a href="{{ headerSection.data.ctaButton.href }}"
-						class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors duration-200">
-						{{ headerSection.data.ctaButton.text }}
-					</a>
-				</div>
-				{% endif %}
-
-				<!-- Mobile menu button -->
-				<div class="md:hidden">
-					<button type="button" data-mobile-menu-toggle class="text-gray-600 hover:text-gray-900"
-						aria-label="Toggle menu">
-						<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-						</svg>
-					</button>
-				</div>
-			</div>
-
-			<!-- Mobile menu -->
-			<div data-mobile-menu class="hidden md:hidden border-t">
-				<div class="px-2 pt-2 pb-3 space-y-1">
-					{% if headerSection.data.navigation %}
-					{% for item in headerSection.data.navigation %}
-					{% if item.label and item.href and item.label.trim() !== '' and item.href.trim() !== '' %}
-					<a href="{{ item.href }}"
-						class="block px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors duration-200">
-						{{ item.label }}
-					</a>
-					{% endif %}
-					{% endfor %}
-					{% endif %}
-
-					{% if headerSection.data.ctaButton %}
-					<div class="pt-4">
-						<a href="{{ headerSection.data.ctaButton.href }}"
-							class="block bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors duration-200 text-center">
-							{{ headerSection.data.ctaButton.text }}
-						</a>
-					</div>
-					{% endif %}
-				</div>
-			</div>
-		</nav>
-	</header>
-	{% endif %}
-	{% endif %}
-
 	<main>
-		{{ content | safe }}
+		{% set currentPage = null %}
+		{% set pageSlug = page.url | replace('/', '') or 'index' %}
+
+		{# Находим текущую страницу в данных #}
+		{% set currentUrl = page.url | replace('/index.html', '/') | replace('//', '/') %}
+		{% for pageData in client.pages %}
+		{% if pageData.slug == currentUrl or (pageData.slug == '/' and currentUrl == '/') %}
+		{% set currentPage = pageData %}
+		{% endif %}
+		{% endfor %}
+
+		{# Если не нашли, используем главную страницу #}
+		{% if not currentPage %}
+		{% set currentPage = client.pages[0] %}
+		{% endif %}
+
+		{# Рендерим секции #}
+		{% if currentPage and currentPage.sections %}
+		{% for section in currentPage.sections %}
+		{% if section.enabled and section.type != 'header' and section.type != 'footer' %}
+		{% include "components/" + section.type + ".njk" %}
+		{% endif %}
+		{% endfor %}
+		{% endif %}
 	</main>
-
-	<!-- Автоматический рендеринг Footer из config.json -->
-	{% if client.sections and client.sections.length > 0 %}
-	{% set footerSection = client.sections | selectattr("type", "equalto", "footer") | first %}
-	{% if footerSection and footerSection.enabled %}
-	<footer class="bg-gray-900 text-white py-12">
-		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-			<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-				<!-- Описание компании -->
-				<div class="md:col-span-2">
-					{% if footerSection.data.logo %}
-					<img
-						src="https://pub-a6698d33e75a45ebb75c9b00d0c3ce2a.r2.dev/clients/{{ client.id }}/images/{{ footerSection.data.logo }}"
-						alt="{{ client.site.title }}" class="h-8 w-auto mb-4">
-					{% endif %}
-					<p class="text-gray-300 mb-4">{{ footerSection.data.description }}</p>
-				</div>
-
-				<!-- Ссылки -->
-				{% if footerSection.data.links %}
-				{% for linkGroup in footerSection.data.links %}
-				<div>
-					<h3 class="text-lg font-semibold mb-4">{{ linkGroup.title }}</h3>
-					<ul class="space-y-2">
-						{% for link in linkGroup.links %}
-						<li>
-							<a href="{{ link.href }}" class="text-gray-300 hover:text-white transition-colors duration-200">
-								{{ link.label }}
-							</a>
-						</li>
-						{% endfor %}
-					</ul>
-				</div>
-				{% endfor %}
-				{% endif %}
-			</div>
-
-			<!-- Copyright -->
-			<div class="border-t border-gray-800 mt-8 pt-8 text-center">
-				<p class="text-gray-400">{{ footerSection.data.copyright }}</p>
-			</div>
-		</div>
-	</footer>
-	{% endif %}
-	{% endif %}
 
 	<!-- Main JS -->
 	<script type="module" src="/assets/js/main.js"></script>

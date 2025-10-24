@@ -1,0 +1,10 @@
+<section class="py-12 max-w-4xl mx-auto px-4">
+	{% if section.data.imageUrl %}
+	<div class="text-center">
+		<img src="{{ section.data.imageUrl }}" alt="{{ section.data.alt or 'Image' }}" class="mx-auto rounded-lg shadow-lg">
+		{% if section.data.caption %}
+		<p class="mt-4 text-gray-600 italic">{{ section.data.caption }}</p>
+		{% endif %}
+	</div>
+	{% endif %}
+</section>

@@ -21,11 +21,33 @@
 
 		{# Находим текущую страницу в данных #}
 		{% set currentUrl = page.url | replace('/index.html', '/') | replace('//', '/') %}
+		{% set currentPage = null %}
+
+		<!-- Debug: currentUrl = {{ currentUrl }} -->
+		<!-- Debug: page.url = {{ page.url }} -->
+
+		{# Специальная логика для главной страницы #}
+		{% if currentUrl == '/' or currentUrl == '/index.html' %}
 		{% for pageData in client.pages %}
-		{% if pageData.slug == currentUrl or (pageData.slug == '/' and currentUrl == '/') %}
+		{% if pageData.slug == '/' %}
 		{% set currentPage = pageData %}
+		<!-- Debug: Found home page -->
 		{% endif %}
 		{% endfor %}
+		{% else %}
+		{# Для остальных страниц - убираем слеш в конце #}
+		{% set cleanUrl = currentUrl | replace('/', '') %}
+		{% for pageData in client.pages %}
+		{% set cleanSlug = pageData.slug | replace('/', '') %}
+		<!-- Debug: Comparing {{ pageData.slug }} ({{ cleanSlug }}) with {{ currentUrl }} ({{ cleanUrl }}) -->
+		{% if pageData.slug == currentUrl or cleanSlug == cleanUrl %}
+		{% set currentPage = pageData %}
+		<!-- Debug: Found page {{ pageData.slug }} -->
+		{% endif %}
+		{% endfor %}
+		{% endif %}
+
+		<!-- Debug: currentPage = {{ currentPage.slug if currentPage else 'null' }} -->
 
 		{# Если не нашли, используем главную страницу #}
 		{% if not currentPage %}

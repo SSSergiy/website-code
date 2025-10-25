@@ -70,7 +70,7 @@ jobs:
         run: |
           echo "🔨 Building site for client: $CLIENT_ID"
           # Инкрементальная сборка - пересобираем только измененные файлы
-          npm run build -- --incremental
+          npx @11ty/eleventy --incremental
           echo "✅ Build completed"
         
       - name: Deploy to main branch

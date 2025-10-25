@@ -10,8 +10,8 @@ const s3Client = new S3Client({
   },
 });
 
-const BUCKET_NAME = process.env.R2_BUCKET_NAME || 'admin-panel';
-const CLIENT_ID = process.env.CLIENT_ID || 'user_34EvUVHa2Fv9rbrXKRzHCbR7791';
+const BUCKET_NAME = process.env.R2_BUCKET_NAME;
+const CLIENT_ID = process.env.CLIENT_ID;
 
 console.log(`🔧 CLIENT_ID: ${CLIENT_ID}`);
 console.log(`🔧 BUCKET_NAME: ${BUCKET_NAME}`);
@@ -107,7 +107,7 @@ module.exports = async function() {
               values: {
                 title: "Добро пожаловать на наш сайт",
                 subtitle: "Мы создаем удивительные веб-решения",
-                backgroundImage: "https://pub-a6698d33e75a45ebb75c9b00d0c3ce2a.r2.dev/clients/user_34EvUVHa2Fv9rbrXKRzHCbR7791/images/1760298738854-sample.jpeg",
+                backgroundImage: "",
                 buttonText: "Узнать больше",
                 buttonLink: "/about"
               }
@@ -180,11 +180,12 @@ module.exports = async function() {
   console.log(`   - Pages slugs:`, pages.map(p => p.slug));
   console.log(`   - Pages with sections:`, pages.map(p => `${p.slug}(${p.sections?.length || 0})`));
   
-  // Функция для построения URL изображений
+  // 🔒 БЕЗОПАСНО: Функция для построения URL изображений через API
   const buildImageUrl = (relativePath) => {
     if (!relativePath) return null;
-    const baseUrl = process.env.R2_PUBLIC_URL || 'https://pub-a6698d33e75a45ebb75c9b00d0c3ce2a.r2.dev';
-    return `${baseUrl}/clients/${CLIENT_ID}/images/${relativePath}`;
+    // Используем API прокси вместо прямых R2 ссылок
+    const baseUrl = process.env.SITE_BASE_URL || 'https://website-code-eg1.pages.dev';
+    return `${baseUrl}/api/images/clients/${CLIENT_ID}/images/${relativePath}`;
   };
 
   const result = {

@@ -134,29 +134,9 @@ module.exports = async function() {
     };
   }
   
-  // Универсальная структура: загружаем все основные файлы
-  const [settings, navigation, seo, adminConfig] = await Promise.all([
-    getJsonFromR2(`clients/${CLIENT_ID}/data/settings.json`),
-    getJsonFromR2(`clients/${CLIENT_ID}/data/navigation.json`),
-    getJsonFromR2(`clients/${CLIENT_ID}/data/seo.json`),
-    getJsonFromR2(`clients/${CLIENT_ID}/data/admin.config.json`)
-  ]);
-  
-  // Логируем статус загрузки файлов
+  // Логируем статус загрузки content.json
   if (!contentData) {
     console.warn(`⚠️ content.json not found for client: ${CLIENT_ID}`);
-  }
-  if (!settings) {
-    console.warn(`⚠️ settings.json not found for client: ${CLIENT_ID}`);
-  }
-  if (!navigation) {
-    console.log(`ℹ️ navigation.json not found for client: ${CLIENT_ID} (optional)`);
-  }
-  if (!seo) {
-    console.log(`ℹ️ seo.json not found for client: ${CLIENT_ID} (optional)`);
-  }
-  if (!adminConfig) {
-    console.log(`ℹ️ admin.config.json not found for client: ${CLIENT_ID} (optional)`);
   }
   
   // Обрабатываем данные из content.json
@@ -210,15 +190,15 @@ module.exports = async function() {
   const result = {
     id: CLIENT_ID,
     site: { 
-      title: pages[0]?.title || settings?.site?.title || 'Site', 
-      description: pages[0]?.description || settings?.site?.description || 'Описание сайта',
-      logo: settings?.site?.logo ? buildImageUrl(settings.site.logo) : null,
-      social: settings?.site?.social || []
+      title: pages[0]?.title || 'Site', 
+      description: pages[0]?.description || 'Описание сайта',
+      logo: null,
+      social: []
     },
-    theme: settings?.theme || {},
-    navigation: navigation || null,
-    seo: seo || null,
-    adminConfig: adminConfig || null,
+    theme: {},
+    navigation: null,
+    seo: null,
+    adminConfig: null,
     sections,
     pages: pages,
     images: images,

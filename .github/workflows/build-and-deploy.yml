@@ -13,6 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      - name: Start timer
+        run: |
+          echo "⏰ Build started at: $(date)"
+          echo "BUILD_START_TIME=$(date +%s)" >> $GITHUB_ENV
       - name: Log webhook info
         if: github.event_name == 'repository_dispatch'
         run: |
@@ -31,7 +35,7 @@ jobs:
           node-version: '20'
           cache: 'npm' # ← Кэширование node_modules
       
-      # Кэширование Eleventy
+      # Кэширование Eleventy build
       - name: Cache Eleventy build
         uses: actions/cache@v4
         with:
@@ -39,11 +43,20 @@ jobs:
           key: ${{ runner.os }}-eleventy-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-eleventy-
+      
+      # Кэширование _site для инкрементальной сборки
+      - name: Cache build output
+        uses: actions/cache@v4
+        with:
+          path: _site
+          key: ${{ runner.os }}-site-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-site-
           
       - name: Install dependencies
         run: |
           echo "📦 Installing dependencies..."
-          npm ci
+          npm ci --prefer-offline --no-audit --no-fund
           echo "✅ Dependencies installed"
         
       - name: Build site
@@ -56,7 +69,8 @@ jobs:
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
         run: |
           echo "🔨 Building site for client: $CLIENT_ID"
-          npm run build
+          # Инкрементальная сборка - пересобираем только измененные файлы
+          npm run build -- --incremental
           echo "✅ Build completed"
         
       - name: Deploy to main branch
@@ -67,3 +81,13 @@ jobs:
           publish_branch: main
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
+          # Оптимизация деплоя
+          force_orphan: true
+          disable_nojekyll: true
+      
+      - name: Build completed timer
+        run: |
+          BUILD_END_TIME=$(date +%s)
+          BUILD_DURATION=$((BUILD_END_TIME - BUILD_START_TIME))
+          echo "⏰ Build completed at: $(date)"
+          echo "🚀 Total build time: ${BUILD_DURATION} seconds"

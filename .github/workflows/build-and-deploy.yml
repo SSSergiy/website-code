@@ -14,17 +14,6 @@ jobs:
     timeout-minutes: 10  # Ограничиваем время выполнения
     
     steps:
-      - name: Start timer
-        run: |
-          echo "⏰ Build started at: $(date)"
-          echo "BUILD_START_TIME=$(date +%s)" >> $GITHUB_ENV
-      - name: Log webhook info
-        if: github.event_name == 'repository_dispatch'
-        run: |
-          echo "🚀 Triggered by webhook"
-          echo "Event type: ${{ github.event.action }}"
-          echo "Client: ${{ github.event.client_payload.userId || 'unknown' }}"
-          echo "Reason: ${{ github.event.client_payload.reason || 'unknown' }}"
       - name: Checkout dev branch
         uses: actions/checkout@v4
         with:
@@ -34,13 +23,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm' # ← Кэширование node_modules
+          cache: 'npm'
       
       - name: Install dependencies
-        run: |
-          echo "📦 Installing dependencies..."
-          npm ci --prefer-offline --no-audit --no-fund
-          echo "✅ Dependencies installed"
+        run: npm ci --prefer-offline --no-audit --no-fund --silent
         
       - name: Build site
         env:
@@ -50,11 +36,7 @@ jobs:
           R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
           R2_BUCKET_NAME: ${{ secrets.R2_BUCKET_NAME }}
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
-        run: |
-          echo "🔨 Building site for client: $CLIENT_ID"
-          # Простая сборка без лишних проверок
-          npm run build
-          echo "✅ Build completed"
+        run: npm run build
         
       - name: Deploy to main branch
         uses: peaceiris/actions-gh-pages@v3
@@ -64,13 +46,5 @@ jobs:
           publish_branch: main
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
-          # Оптимизация деплоя
           force_orphan: true
           disable_nojekyll: true
-      
-      - name: Build completed timer
-        run: |
-          BUILD_END_TIME=$(date +%s)
-          BUILD_DURATION=$((BUILD_END_TIME - BUILD_START_TIME))
-          echo "⏰ Build completed at: $(date)"
-          echo "🚀 Total build time: ${BUILD_DURATION} seconds"

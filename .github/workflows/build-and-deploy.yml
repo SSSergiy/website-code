@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - dev
+  repository_dispatch:
+    types: [content-updated]
   workflow_dispatch:
 
 jobs:
@@ -11,6 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      - name: Log webhook info
+        if: github.event_name == 'repository_dispatch'
+        run: |
+          echo "🚀 Triggered by webhook"
+          echo "Event type: ${{ github.event.action }}"
+          echo "Client: ${{ github.event.client_payload.userId || 'unknown' }}"
+          echo "Reason: ${{ github.event.client_payload.reason || 'unknown' }}"
       - name: Checkout dev branch
         uses: actions/checkout@v4
         with:

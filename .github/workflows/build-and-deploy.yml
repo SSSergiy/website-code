@@ -11,6 +11,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 10  # Ограничиваем время выполнения
     
     steps:
       - name: Start timer
@@ -35,44 +36,11 @@ jobs:
           node-version: '20'
           cache: 'npm' # ← Кэширование node_modules
       
-      # Дополнительное кэширование node_modules
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      
-      # Кэширование Eleventy build
-      - name: Cache Eleventy build
-        uses: actions/cache@v4
-        with:
-          path: .cache
-          key: ${{ runner.os }}-eleventy-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-eleventy-
-      
-      # Кэширование _site для инкрементальной сборки
-      - name: Cache build output
-        uses: actions/cache@v4
-        with:
-          path: _site
-          key: ${{ runner.os }}-site-${{ github.ref_name }}-${{ hashFiles('**/*.njk', '**/*.js', '**/*.cjs') }}
-          restore-keys: |
-            ${{ runner.os }}-site-${{ github.ref_name }}-
-            ${{ runner.os }}-site-
-          
       - name: Install dependencies
         run: |
           echo "📦 Installing dependencies..."
-          # Проверяем, есть ли уже node_modules
-          if [ ! -d "node_modules" ]; then
-            npm ci --prefer-offline --no-audit --no-fund
-            echo "✅ Dependencies installed"
-          else
-            echo "✅ Dependencies already cached, skipping install"
-          fi
+          npm ci --prefer-offline --no-audit --no-fund
+          echo "✅ Dependencies installed"
         
       - name: Build site
         env:
@@ -84,18 +52,8 @@ jobs:
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
         run: |
           echo "🔨 Building site for client: $CLIENT_ID"
-          # Проверяем, есть ли уже _site и не изменился ли контент
-          if [ -d "_site" ] && [ ! -f "_site/.build-trigger" ]; then
-            echo "📁 Site already built, checking for changes..."
-            # Проверяем, изменился ли content.json в R2
-            echo "🔄 Content may have changed, rebuilding..."
-          fi
-          
-          # Создаем маркер для отслеживания сборки
-          touch _site/.build-trigger 2>/dev/null || true
-          
-          # Инкрементальная сборка - пересобираем только измененные файлы
-          npx @11ty/eleventy --incremental
+          # Простая сборка без лишних проверок
+          npm run build
           echo "✅ Build completed"
         
       - name: Deploy to main branch

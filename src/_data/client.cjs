@@ -181,11 +181,19 @@ module.exports = async function() {
   console.log(`   - Pages with sections:`, pages.map(p => `${p.slug}(${p.sections?.length || 0})`));
   
   // 🔒 БЕЗОПАСНО: Функция для построения URL изображений через API
-  const buildImageUrl = (relativePath) => {
-    if (!relativePath) return null;
-    // Используем API прокси вместо прямых R2 ссылок
-    const baseUrl = process.env.SITE_BASE_URL || 'https://website-code-eg1.pages.dev';
-    return `${baseUrl}/api/images/clients/${CLIENT_ID}/images/${relativePath}`;
+  const buildImageUrl = (imageUrl) => {
+    if (!imageUrl) return null;
+    
+    // Если это уже полный R2 URL, извлекаем имя файла
+    if (imageUrl.includes('r2.dev')) {
+      const fileName = imageUrl.split('/').pop();
+      const baseUrl = process.env.SITE_BASE_URL ;
+      return `${baseUrl}/api/images/clients/${CLIENT_ID}/images/${fileName}`;
+    }
+    
+    // Если это уже относительный путь, используем как есть
+    const baseUrl = process.env.SITE_BASE_URL ;
+    return `${baseUrl}/api/images/clients/${CLIENT_ID}/images/${imageUrl}`;
   };
 
   const result = {

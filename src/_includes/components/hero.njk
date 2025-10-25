@@ -1,5 +1,5 @@
 <section class="py-16 text-center bg-cover bg-center" {% if section.data.backgroundImage
-	%}style="background-image: url('{{ section.data.backgroundImage }}')" {% endif %}>
+	%}style="background-image: url('{{ client.buildImageUrl(section.data.backgroundImage) }}')" {% endif %}>
 	<div class="max-w-4xl mx-auto px-4">
 		<h1 class="text-4xl font-bold text-white mb-4">{{ section.data.title or section.data.heading }}</h1>
 		{% if section.data.subtitle or section.data.subheading %}

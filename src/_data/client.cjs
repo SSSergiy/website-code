@@ -180,20 +180,18 @@ module.exports = async function() {
   console.log(`   - Pages slugs:`, pages.map(p => p.slug));
   console.log(`   - Pages with sections:`, pages.map(p => `${p.slug}(${p.sections?.length || 0})`));
   
-  // 🔒 БЕЗОПАСНО: Функция для построения URL изображений через API
+  // Функция для построения URL изображений
   const buildImageUrl = (imageUrl) => {
     if (!imageUrl) return null;
     
-    // Если это уже полный R2 URL, извлекаем имя файла
+    // Если это уже полный R2 URL, возвращаем как есть
     if (imageUrl.includes('r2.dev')) {
-      const fileName = imageUrl.split('/').pop();
-      const baseUrl = process.env.SITE_BASE_URL ;
-      return `${baseUrl}/api/images/clients/${CLIENT_ID}/images/${fileName}`;
+      return imageUrl;
     }
     
-    // Если это уже относительный путь, используем как есть
-    const baseUrl = process.env.SITE_BASE_URL ;
-    return `${baseUrl}/api/images/clients/${CLIENT_ID}/images/${imageUrl}`;
+    // Если это относительный путь, строим полный R2 URL
+    const baseUrl = process.env.R2_PUBLIC_URL || `https://pub-${process.env.R2_ACCOUNT_ID}.r2.dev`;
+    return `${baseUrl}/clients/${CLIENT_ID}/images/${imageUrl}`;
   };
 
   const result = {

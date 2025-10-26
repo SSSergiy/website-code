@@ -3,6 +3,7 @@ languageCode = 'ru'
 title = 'Multi-Tenant CMS'
 enableRobotsTXT = false
 enableGitInfo = false
+disableHugoGeneratorInject = true
 
 [params]
   description = 'Static site generator for multi-tenant CMS'

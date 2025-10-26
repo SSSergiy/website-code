@@ -1,0 +1,9 @@
+<section class="text-section">
+    <div class="text-container">
+        {{ if .values.content }}
+        <div class="text-content" style="text-align: {{ .values.alignment | default " left" }}">
+            {{ .values.content | markdownify }}
+        </div>
+        {{ end }}
+    </div>
+</section>

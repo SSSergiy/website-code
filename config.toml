@@ -1,0 +1,36 @@
+baseURL = 'https://website-code-eg1.pages.dev'
+languageCode = 'ru'
+title = 'Multi-Tenant CMS'
+enableRobotsTXT = false
+enableGitInfo = false
+
+[params]
+  description = 'Static site generator for multi-tenant CMS'
+
+# Output formats
+[outputs]
+  home = ['HTML']
+
+# Hugo Pipes для SCSS
+[module]
+  [[module.mounts]]
+    source = 'assets'
+    target = 'assets'
+  [[module.mounts]]
+    source = 'static'
+    target = 'static'
+  
+[build]
+  writeStats = true
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+[security]
+  enableInlineShortcodes = false
+
+  [security.funcs]
+    getenv = ['^HUGO_', '^CI$', '^R2_', '^CLIENT_ID$', '^GITHUB_TOKEN$']
+

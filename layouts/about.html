@@ -1,0 +1,19 @@
+{{ define "main" }}
+{{ $content := .Site.Data.content }}
+
+{{ range $pageId, $page := $content.pages }}
+{{ if eq $pageId "about" }}
+<div class="page-container">
+	{{ range $page.sections }}
+	{{ if eq .type "hero" }}
+	{{ partial "hero.html" . }}
+	{{ else if eq .type "text" }}
+	{{ partial "text.html" . }}
+	{{ else if eq .type "image" }}
+	{{ partial "image.html" . }}
+	{{ end }}
+	{{ end }}
+</div>
+{{ end }}
+{{ end }}
+{{ end }}

@@ -1,0 +1,10 @@
+<section class="image-section">
+    {{ if .values.imageUrl }}
+    <div class="image-container">
+        <img src="{{ .values.imageUrl }}" alt="{{ .values.alt | default " Image" }}" class="image">
+        {{ if .values.caption }}
+        <p class="image-caption">{{ .values.caption }}</p>
+        {{ end }}
+    </div>
+    {{ end }}
+</section>

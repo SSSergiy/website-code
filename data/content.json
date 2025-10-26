@@ -1,0 +1,128 @@
+{
+  "pages": {
+    "home": {
+      "id": "home",
+      "title": "Главная страница",
+      "slug": "/",
+      "status": "published",
+      "sections": [
+        {
+          "id": "hero-1",
+          "type": "hero",
+          "name": "hero",
+          "description": "Секция типа hero",
+          "fields": "title, subtitle, backgroundImage, buttonText, buttonLink",
+          "items": "Добро пожаловать на наш сайтбббб, Мы создаем удивительные веб-решения, https://pub-a6698d33e75a45ebb75c9b00d0c3ce2a.r2.dev/clients/user_34EvUVHa2Fv9rbrXKRzHCbR7791/images/1760298738854-sample.jpeg, Узнать больше, /about",
+          "values": {
+            "title": "welcom to my site",
+            "subtitle": "Мы создаем удивительные веб-решения",
+            "backgroundImage": "https://pub-a6698d33e75a45ebb75c9b00d0c3ce2a.r2.dev/clients/user_34EvUVHa2Fv9rbrXKRzHCbR7791/images/1760298738854-sample.jpeg",
+            "buttonText": "Узнать больше",
+            "buttonLink": "/about"
+          }
+        },
+        {
+          "id": "text-1",
+          "type": "text",
+          "values": {
+            "content": "Это главная страница нашего сайта. Здесь вы можете найти всю необходимую информацию о наших услугах и продуктах.",
+            "alignment": "center"
+          }
+        },
+        {
+          "id": "image-1",
+          "type": "image",
+          "values": {
+            "imageUrl": "https://pub-a6698d33e75a45ebb75c9b00d0c3ce2a.r2.dev/clients/user_34EvUVHa2Fv9rbrXKRzHCbR7791/images/1760299485839-sample.jpeg",
+            "alt": "Главное изображение",
+            "caption": "Наша команда в работе"
+          }
+        }
+      ]
+    },
+    "about": {
+      "id": "about",
+      "title": "О нас",
+      "slug": "/about",
+      "status": "published",
+      "sections": [
+        {
+          "id": "text-1",
+          "type": "text",
+          "values": {
+            "content": "Мы - команда профессионалов, которая занимается созданием современных веб-решений уже более 5 лет.",
+            "alignment": "left"
+          }
+        },
+        {
+          "id": "text-2",
+          "type": "text",
+          "values": {
+            "content": "Наша миссия - помочь бизнесу расти в цифровом мире.",
+            "alignment": "center"
+          }
+        }
+      ]
+    },
+    "services": {
+      "id": "services",
+      "title": "Услуги",
+      "slug": "/services",
+      "status": "published",
+      "sections": [
+        {
+          "id": "hero-1",
+          "type": "hero",
+          "values": {
+            "title": "Наши услуги",
+            "subtitle": "Полный спектр веб-разработки",
+            "backgroundImage": "https://pub-a6698d33e75a45ebb75c9b00d0c3ce2a.r2.dev/clients/user_34EvUVHa2Fv9rbrXKRzHCbR7791/images/Generated%20Image%20October%2012%2C%202025%20-%201_15PM.png",
+            "buttonText": "Связаться с нами",
+            "buttonLink": "/contact"
+          }
+        },
+        {
+          "id": "text-1",
+          "type": "text",
+          "values": {
+            "content": "Мы предлагаем широкий спектр услуг по веб-разработке, дизайну и продвижению.",
+            "alignment": "center"
+          }
+        }
+      ]
+    },
+    "contact": {
+      "id": "contact",
+      "title": "Контакты",
+      "slug": "/contact",
+      "status": "published",
+      "sections": [
+        {
+          "id": "text-1",
+          "type": "text",
+          "values": {
+            "content": "Свяжитесь с нами любым удобным способом",
+            "alignment": "center"
+          }
+        },
+        {
+          "id": "text-2",
+          "type": "text",
+          "values": {
+            "content": "Email: info@example.com\nТелефон: +7 (999) 123-45-67\nАдрес: Москва, ул. Примерная, д. 1",
+            "alignment": "left"
+          }
+        }
+      ]
+    }
+  },
+  "github": {
+    "owner": "SSSergiy",
+    "repo": "website-code",
+    "branch": "dev"
+  },
+  "site": {
+    "url": "https://website-code-eg1.pages.dev",
+    "title": "Мой сайт"
+  }
+}

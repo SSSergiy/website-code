@@ -11,7 +11,7 @@
 		<div class="hero-container">
 			<h1 class="hero-title">{{ .values.title }}</h1>
 			{{ if .values.subtitle }}
-			<p class="hero-subtitle">{{ .values.subtitle }}</p>
+			{{ partial "seo-tags.html" .values.subtitle }}
 			{{ end }}
 			{{ if and .values.buttonText .values.buttonLink }}
 			<a href="{{ .values.buttonLink }}" class="hero-button">{{ .values.buttonText }}</a>
@@ -24,7 +24,7 @@
 	<section class="text-section">
 		<div class="text-container">
 			<div class="text-content" style="text-align: {{ .values.alignment }}">
-				{{ .values.content }}
+				{{ partial "seo-tags.html" .values.content }}
 			</div>
 		</div>
 	</section>

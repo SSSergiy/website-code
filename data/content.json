@@ -9,12 +9,8 @@
         {
           "id": "hero-1",
           "type": "hero",
-          "name": "hero",
-          "description": "Секция типа hero",
-          "fields": "title, subtitle, backgroundImage, buttonText, buttonLink",
-          "items": "Добро пожаловать на наш сайтбббб, Мы создаем удивительные веб-решения, https://pub-a6698d33e75a45ebb75c9b00d0c3ce2a.r2.dev/clients/user_34EvUVHa2Fv9rbrXKRzHCbR7791/images/1760298738854-sample.jpeg, Узнать больше, /about",
           "values": {
-            "title": "welcom to my site",
+            "title": "Добро пожаловать на наш сайт",
             "subtitle": "Мы создаем удивительные веб-решения",
             "backgroundImage": "https://pub-a6698d33e75a45ebb75c9b00d0c3ce2a.r2.dev/clients/user_34EvUVHa2Fv9rbrXKRzHCbR7791/images/1760298738854-sample.jpeg",
             "buttonText": "Узнать больше",

@@ -10,7 +10,7 @@
 	<!-- Custom CSS -->
 	{{ $scss := resources.Get "scss/main.scss" }}
 	{{ if $scss }}
-	{{ $scssOpts := dict "targetPath" "css/style.css" }}
+	{{ $scssOpts := dict "targetPath" "css/style.css" "sourceMap" "inline" }}
 	{{ $scssProcessed := $scss | css.Sass $scssOpts }}
 	<link rel="stylesheet" href="{{ $scssProcessed.RelPermalink }}">
 	{{ else }}

@@ -1,39 +1,28 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ .Title }} - {{ .Site.Title }}</title>
+    <meta name="description" content="{{ .Description | default .Site.Params.description }}" />
+    {{ $scss := resources.Get
+      "scss/main.scss"
+    }}{{ if $scss }}
+      {{ $scssOpts := dict "targetPath" "css/style.css" "sourceMap" "inline" }}{{ $scssProcessed := $scss | css.Sass $scssOpts }}
+      <link rel="stylesheet" href="{{ $scssProcessed.RelPermalink }}" />
+    {{ else }}
+      <link rel="stylesheet" href="/css/style.css" />
+    {{ end }}
+  </head>
 
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>{{ .Title }} - {{ .Site.Title }}</title>
-	<meta name="description" content="{{ .Description | default .Site.Params.description }}">
-
-	<!-- Custom CSS -->
-	{{ $scss := resources.Get "scss/main.scss" }}
-	{{ if $scss }}
-	{{ $scssOpts := dict "targetPath" "css/style.css" "sourceMap" "inline" }}
-	{{ $scssProcessed := $scss | css.Sass $scssOpts }}
-	<link rel="stylesheet" href="{{ $scssProcessed.RelPermalink }}">
-	{{ else }}
-	<!-- Fallback CSS -->
-	<link rel="stylesheet" href="/css/style.css">
-	{{ end }}
-</head>
-
-<body class="antialiased">
-	<main>
-		{{ block "main" . }}{{ end }}
-	</main>
-
-	<!-- Main JS -->
-	{{ $js := resources.Get "js/main.js" }}
-	{{ if $js }}
-	{{ $jsOpts := dict "targetPath" "js/main.js" }}
-	{{ $jsProcessed := $js | js.Build $jsOpts }}
-	<script src="{{ $jsProcessed.RelPermalink }}"></script>
-	{{ else }}
-	<!-- Fallback JS -->
-	<script src="/js/main.js"></script>
-	{{ end }}
-</body>
-
+  <body class="antialiased">
+    {{- block "body" . -}}{{- end -}}{{ $js := resources.Get "js/main.js" }}{{ if $js }}
+      {{ $jsOpts := dict
+        "targetPath" "js/main.js"
+      }}{{ $jsProcessed := $js | js.Build $jsOpts }}
+      <script src="{{ $jsProcessed.RelPermalink }}"></script>
+    {{ else }}
+      <script src="/js/main.js"></script>
+    {{ end }}
+  </body>
 </html>

@@ -1,19 +1,35 @@
-{{ define "main" }}
+{{ define "body" }}
 {{ $content := .Site.Data.content }}
-
 {{ range $pageId, $page := $content.pages }}
 {{ if eq $pageId "services" }}
-<div class="page-container">
+<main>
 	{{ range $page.sections }}
 	{{ if eq .type "hero" }}
-	{{ partial "hero.html" . }}
-	{{ else if eq .type "text" }}
-	{{ partial "text.html" . }}
-	{{ else if eq .type "image" }}
-	{{ partial "image.html" . }}
+	<section class="hero-section" {{- if .values.backgroundImage -}}
+		style="background-image: url('{{ .values.backgroundImage }}')" {{- end -}}>
+		<div class="hero-container">
+			<h1 class="hero-title">{{ .values.title }}</h1>
+			{{ if .values.subtitle }}
+			<p class="hero-subtitle">{{ .values.subtitle }}</p>
+			{{ end }}
+			{{ if and .values.buttonText .values.buttonLink }}
+			<a href="{{ .values.buttonLink }}" class="hero-button">{{ .values.buttonText }}</a>
+			{{ end }}
+		</div>
+	</section>
+	{{ end }}
+
+	{{ if eq .type "text" }}
+	<section class="text-section">
+		<div class="text-container">
+			<div class="text-content">
+				{{ .values.content }}
+			</div>
+		</div>
+	</section>
 	{{ end }}
 	{{ end }}
-</div>
+</main>
 {{ end }}
 {{ end }}
 {{ end }}

@@ -1,19 +1,20 @@
-{{ define "main" }}
+{{ define "body" }}
 {{ $content := .Site.Data.content }}
-
 {{ range $pageId, $page := $content.pages }}
 {{ if eq $pageId "about" }}
-<div class="page-container">
+<main>
 	{{ range $page.sections }}
-	{{ if eq .type "hero" }}
-	{{ partial "hero.html" . }}
-	{{ else if eq .type "text" }}
-	{{ partial "text.html" . }}
-	{{ else if eq .type "image" }}
-	{{ partial "image.html" . }}
+	{{ if eq .type "text" }}
+	<section class="text-section">
+		<div class="text-container">
+			<div class="text-content" style="text-align: {{ .values.alignment | default " left" }}">
+				{{ .values.content }}
+			</div>
+		</div>
+	</section>
 	{{ end }}
 	{{ end }}
-</div>
+</main>
 {{ end }}
 {{ end }}
 {{ end }}

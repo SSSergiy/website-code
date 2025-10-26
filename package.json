@@ -4,12 +4,11 @@
   "description": "Hugo-based static website generator",
   "type": "module",
   "scripts": {
-    "fetch": "node scripts/fetch-r2.js",
-    "generate": "node scripts/generate-pages.js",
-    "dev": "npm run fetch && npm run generate && hugo server --port 1313",
-    "build": "npm run fetch && npm run generate && hugo --minify",
+    "dev": "hugo server --port 1313",
+    "build": "hugo --minify",
     "clean": "hugo --cleanDestinationDir",
-    "preview": "hugo server --port 1313 --navigateToChanged"
+    "preview": "hugo server --port 1313 --navigateToChanged",
+    "format": "echo 'Use manual formatting for Hugo templates'"
   },
   "dependencies": {
     "dotenv": "^16.0.0",
@@ -18,6 +17,10 @@
     "postcss": "^8.4.0",
     "postcss-sort-media-queries": "^5.2.0",
     "sass": "^1.85.1"
+  },
+  "devDependencies": {
+    "prettier": "^3.0.0",
+    "prettier-plugin-go-template": "^0.0.14"
   }
 }
 

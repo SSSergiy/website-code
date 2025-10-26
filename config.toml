@@ -11,6 +11,11 @@ enableGitInfo = false
 [outputs]
   home = ['HTML']
 
+# Отключить taxonomy (теги/категории)
+[taxonomies]
+  tag = ""
+  category = ""
+
 # Hugo Pipes для SCSS
 [module]
   [[module.mounts]]

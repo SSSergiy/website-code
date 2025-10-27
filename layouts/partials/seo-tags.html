@@ -1,14 +1,11 @@
 {{- $text := . -}}
 
-{{- /* 1. СНАЧАЛА длинные фразы с вложенностью */ -}}
-{{- $replacement := "<strong>Мы <em><mark>создаем</mark> удивительные</em></strong> <strong>веб-решения</strong>" -}}
-{{- $text = replace $text "Мы создаем удивительные веб-решения" $replacement -}}
-
-{{- /* 2. ПОТОМ короткие слова */ -}}
-{{- $text = replaceRE `\bуслуги\b` "<strong>услуги</strong>" $text -}}
-{{- $text = replaceRE `\bпродукты\b` "<strong>продукты</strong>" $text -}}
-{{- $text = replaceRE `\bSEO\b` "<strong>SEO</strong>" $text -}}
-{{- $text = replaceRE `\bключ\b` "<mark>ключ</mark>" $text -}}
-{{- $text = replaceRE `\bважно\b` "<em>важно</em>" $text -}}
-
+{{- /* Условия для конкретных текстов */ -}}
+{{- if eq $text "Мы создаем удивительные веб-решения" -}}
+<p class="hero-subtitle">
+	<strong>Мы <em><mark>создаем</mark> удивительные</em></strong>
+	<strong>веб-решения</strong>
+</p>
+{{- else -}}
 <p class="hero-subtitle">{{ $text | safeHTML }}</p>
+{{- end -}}

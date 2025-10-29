@@ -37,12 +37,12 @@ jobs:
       - name: Build Hugo site
         run: hugo --minify
         
-      - name: Deploy to main branch
+      - name: Deploy to dev branch
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
-          publish_branch: main
+          publish_branch: dev
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
           force_orphan: true

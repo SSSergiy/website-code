@@ -3,7 +3,7 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - dev
+      - main
   repository_dispatch:
     types: [content-updated]
   workflow_dispatch:
@@ -14,10 +14,10 @@ jobs:
     timeout-minutes: 10  # Ограничиваем время выполнения
     
     steps:
-      - name: Checkout dev branch
+      - name: Checkout main branch
         uses: actions/checkout@v4
         with:
-          ref: dev
+          ref: main
         
       - name: Setup Node.js
         uses: actions/setup-node@v4

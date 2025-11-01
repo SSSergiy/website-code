@@ -33,10 +33,10 @@ jobs:
       - name: Download content.json from R2
         if: github.event_name == 'repository_dispatch'
         env:
-          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
-          R2_BUCKET_NAME: ${{ secrets.R2_BUCKET_NAME }}
+          R2_ACCESS_KEY_ID: 8cf75816f7b61b68ed54c7b9ee6a7149
+          R2_SECRET_ACCESS_KEY: 0b5862ffbe43af2ee8ba0c4037116852b7c6a5609c5c445574c654e4a23949d7
+          R2_ENDPOINT: https://122357ca47842997e22542d75d31da2d.r2.cloudflarestorage.com
+          R2_BUCKET_NAME: multi-tenant-cms-storage
           USER_ID: ${{ github.event.client_payload.userId }}
         run: |
           if [ -n "$USER_ID" ]; then
@@ -76,6 +76,35 @@ jobs:
             "
           else
             echo "ℹ️ No userId in payload, using content.json from repository"
+          fi
+      
+      - name: Update content.json in GitHub
+        if: github.event_name == 'repository_dispatch' && github.event.client_payload.userId != ''
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -f "data/content.json" ]; then
+            echo "🔄 Updating content.json in GitHub repository..."
+            
+            # Устанавливаем git config
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            
+            # Настраиваем remote с токеном
+            git remote set-url origin https://x-access-token:$GITHUB_TOKEN@github.com/${{ github.repository }}.git
+            
+            # Добавляем файл
+            git add data/content.json
+            
+            # Проверяем есть ли изменения
+            if git diff --staged --quiet; then
+              echo "ℹ️ No changes in content.json, skipping commit"
+            else
+              # Коммитим и пушим
+              git commit -m "Update content.json from R2 (triggered by admin panel)"
+              git push origin main
+              echo "✅ content.json updated in GitHub repository"
+            fi
           fi
       
       - name: Setup Hugo
